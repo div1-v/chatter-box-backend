@@ -139,7 +139,7 @@ exports.login = async (req, response, next) => {
     const cookieOptions = {
       http: true,
       secure: true,
-      domain: 'https://chatter-box-backend-zudn.onrender.com',
+      domain: '.onrender.com',
     };
 
     return response.cookie("token", token, cookieOptions).status(200).json({
