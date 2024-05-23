@@ -42,7 +42,7 @@ exports.createUser = async (req, res, next) => {
 
 exports.getUser = async (request, response, next) => {
   try {
-    const token = request?.cookies?.token || ""
+    const token = request?.cookies?.token || localStorage.getItem("token") || ""
     
     const user = await getUserDetailsFromToken(token)
     return response.status(200).json({
