@@ -5,7 +5,6 @@ const getUserDetailsFromToken = require('./../helpers/getUserDetailsFromToken')
 
 exports.createUser = async (req, res, next) => {
   try {
-    console.log(req.body);
     const { name, email, password, profile_pic } = req.body;
     const isEmail = await User.findOne({ email });
     if (isEmail) {
@@ -42,8 +41,8 @@ exports.createUser = async (req, res, next) => {
 
 exports.getUser = async (request, response, next) => {
   try {
-    let token = request?.headers?.cookie || ""
-    token= token.substring(6);
+    let token = request.cookies.token || ""
+    console.log('token-> ',token);
     const user = await getUserDetailsFromToken(token)
     return response.status(200).json({
         message : "user details",
@@ -113,7 +112,6 @@ exports.searchEmail = async (req, response, next) => {
 exports.login = async (req, response, next) => {
   try {
     const { email,password } = req.body;
-    console.log(password, email);
     const user = await User.findOne({ email });
     if (!user) {
       return response.status(400).json({
@@ -141,6 +139,7 @@ exports.login = async (req, response, next) => {
     const cookieOptions = {
       http: true,
       secure: true,
+      domain: 'https://chatter-box-backend-zudn.onrender.com',
     };
 
     return response.cookie("token", token, cookieOptions).status(200).json({
@@ -162,14 +161,12 @@ exports.searchUser = async (request,response) => {
       const { search } = request.body
 
       const query = new RegExp(search,"i","g")
-      console.log(request.body);
       const user = await User.find({
           "$or" : [
               { name : query },
               { email : query }
           ]
       }).select("-password")
-      console.log(user);
       return response.json({
           message : 'all user',
           data : user,
