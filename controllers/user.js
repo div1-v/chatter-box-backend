@@ -42,8 +42,8 @@ exports.createUser = async (req, res, next) => {
 
 exports.getUser = async (request, response, next) => {
   try {
-    const token = localStorage.getItem("token") || ""
-    
+    let token = request?.headers?.cookie || ""
+    token= token.substring(6);
     const user = await getUserDetailsFromToken(token)
     return response.status(200).json({
         message : "user details",
