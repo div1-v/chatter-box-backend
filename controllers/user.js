@@ -41,7 +41,7 @@ exports.createUser = async (req, res, next) => {
 
 exports.getUser = async (request, response, next) => {
   try {
-    let token = request.cookies.token || ""
+    let {token} = request.body;
     console.log('token-> ',token);
     const user = await getUserDetailsFromToken(token)
     return response.status(200).json({
@@ -58,9 +58,9 @@ exports.getUser = async (request, response, next) => {
 
 exports.updateUserDetails = async (request, response) => {
   try {
-    const token = request.cookies.token || ""
+    const { name, profile_pic,token } = request.body;
+    console.log('token-> update ',token);
     const user = await getUserDetailsFromToken(token);
-    const { name, profile_pic } = request.body;
 
     const updateUser = await User.updateOne(
       { _id: user._id },
@@ -139,7 +139,6 @@ exports.login = async (req, response, next) => {
     const cookieOptions = {
       http: true,
       secure: true,
-      domain: 'chatter-box-backend-zudn.onrender.com',
     };
 
     return response.cookie("token", token, cookieOptions).status(200).json({
@@ -158,14 +157,15 @@ exports.login = async (req, response, next) => {
 
 exports.searchUser = async (request,response) => {
   try {
-      const { search } = request.body
+      const { search, userId } = request.body
 
       const query = new RegExp(search,"i","g")
       const user = await User.find({
           "$or" : [
               { name : query },
               { email : query }
-          ]
+          ],
+          _id: { $ne: userId }
       }).select("-password")
       return response.json({
           message : 'all user',

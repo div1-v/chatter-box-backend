@@ -10,6 +10,6 @@ router.route("/password").post(userController.login); //login
 router.route("/users").post(userController.searchUser); //get User
 router.route('/email').post(userController.searchEmail);
 router.route("/user").put( userController.updateUserDetails); //update user
-router.route('/user-details').get(userController.getUser);
+router.route('/user-details').post(userController.getUser);
 
 module.exports = router;
