@@ -26,15 +26,3 @@ connectDb().then(() => {
   });
 });
 
-// keep server running
-const apiUrl1 = 'https://chatter-box-backend-zudn.onrender.com';
-const apiUrl2 = 'https://blogging-app-qwgp.onrender.com';
-setInterval(() => {
-  fetch(apiUrl1)
-    .then((data) => console.log("Page Refreshed:"))
-    .catch((error) => console.error("Error:"));
-
-  fetch(apiUrl2)
-    .then((data) => console.log("Page Refreshed:"))
-    .catch((error) => console.error("Error:", error));
-}, 20000);
